@@ -1,9 +1,26 @@
-<div class="login-card">
-    <h2>Login do Responsável</h2>
-    <form method="POST">
-        <input type="text" name="usuario" placeholder="Seu Usuário" required>
-        <input type="password" name="senha" placeholder="Sua Senha" required>
-        <button type="submit">Entrar</button>
-    </form>
-    <p>Não tem conta? <a href="/registrar_responsavel">Crie uma aqui</a></p>
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login do Responsável</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .erro { color: red; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Login Responsável</h2>
+        {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+        <form method="POST">
+            <input type="text" name="usuario" placeholder="Usuário" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p style="font-size: 12px;">Não tem conta? <a href="/cadastro_responsavel">Cadastre-se</a></p>
+    </div>
+</body>
+</html>
