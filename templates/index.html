@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha de Matrícula</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .abas { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 2px solid #eee; }
+        .aba { padding: 10px; color: #ccc; font-weight: bold; }
+        .aba.ativa { color: #007bff; border-bottom: 3px solid #007bff; }
+        .passo { display: none; }
+        .passo.ativo { display: block; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        label { display: block; font-size: 13px; color: #666; margin-top: 10px; font-weight: bold; }
+        .botoes { display: flex; justify-content: space-between; margin-top: 20px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-proximo { background-color: #007bff; color: white; width: 100%; }
+        .btn-voltar { background-color: #6c757d; color: white; }
+        .btn-enviar { background-color: #28a745; color: white; flex-grow: 1; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="abas">
+            <div id="aba1" class="aba ativa">1. Dados</div>
+            <div id="aba2" class="aba">2. Documentos</div>
+        </div>
+
+        <form id="formMatricula" method="POST" enctype="multipart/form-data">
+
+            <div id="passo1" class="passo ativo">
+                <input type="text" name="nome" id="nome" placeholder="Nome Completo do Aluno" required>
+
+                <label>Curso:</label>
+                <select name="curso" required>
+                    <option value="" disabled selected>Escolha o curso...</option>
+                    <option value="Estimulação I">Estimulação I</option>
+                    <option value="Estimulação II">Estimulação II</option>
+                    <option value="Nivel I">Nível I</option>
+                    <option value="Nivel II">Nível II</option>
+                    <option value="Nivel III">Nível III</option>
+                    <option value="Nivel IV">Nível IV</option>
+                    <option value="1º Ano">1º Ano</option>
+                    <option value="2º Ano">2º Ano</option>
+                    <option value="3º Ano">3º Ano</option>
+                    <option value="4º Ano">4º Ano</option>
+                    <option value="5º Ano">5º Ano</option>
+                    <option value="6º Ano">6º Ano</option>
+                    <option value="7º Ano">7º Ano</option>
+                    <option value="8º Ano">8º Ano</option>
+                    <option value="9º Ano">9º Ano</option>
+                    <option value="1ª Série">1ª Série</option>
+                    <option value="2ª Série">2ª Série</option>
+                    <option value="3ª Série">3ª Série</option>
+                </select>
+
+                <label>Parentesco:</label>
+                <select name="parentesco">
+                    <option value="Pai / Mãe">Pai / Mãe</option>
+                    <option value="Outro">Outro Responsável</option>
+                </select>
+
+                <input type="text" name="cep" id="cep" placeholder="CEP" onblur="buscaCEP()" required>
+                <input type="hidden" name="rua" id="rua">
+                <input type="hidden" name="bairro" id="bairro">
+                <input type="hidden" name="cidade" id="cidade">
+
+                <input type="text" name="numero_da_rua" placeholder="Numero da Rua" required>
+                <input type="text" name="complemento" placeholder="Complemento" required>
+
+                <select name="estado" id="estado" onchange="atualizarDDD()">
+                    <option value="RN" data-ddd="84">RN</option>
+                    <option value="SP" data-ddd="11">SP</option>
+                </select>
+
+                <input type="text" name="telefone" id="telefone" required>
+
+                <div class="botoes">
+                    <button type="button" class="btn btn-proximo" onclick="irParaDocumentos()">Próximo ➡</button>
+                </div>
+            </div>
+
+            <div id="passo2" class="passo">
+                <label>Doc. Aluno:</label><input type="file" name="doc_aluno">
+                <label>Doc. Pai:</label><input type="file" name="doc_pai">
+                <label>Doc. Mãe:</label><input type="file" name="doc_mae">
+                <label>Doc. Resp. Financeiro:</label><input type="file" name="doc_resp">
+                <label>Comp. Residência:</label><input type="file" name="comprovante_residencia">
+                <label>Cartão de Vacina:</label><input type="file" name="cartao_vacina">
+                <label>Declaração Escola Anterior:</label><input type="file" name="declaracao_escola">
+                <label>Histórico Escolar:</label><input type="file" name="historico_escola">
+                <label>Boletim:</label><input type="file" name="boletim_escola">
+                <label>Ficha de Transferência:</label><input type="file" name="ficha_transferencia">
+
+                <div class="botoes">
+                    <button type="button" class="btn btn-voltar" onclick="voltarParaDados()">⬅ Voltar</button>
+                    <button type="submit" class="btn btn-enviar">Finalizar ✔</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function atualizarDDD() {
+            const ddd = document.getElementById('estado').options[document.getElementById('estado').selectedIndex].getAttribute('data-ddd');
+            document.getElementById('telefone').value = "(" + ddd + ") ";
+        }
+        function buscaCEP() {
+            let cep = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json()).then(d => {
+                    if (!d.erro) {
+                        document.getElementById('rua').value = d.logradouro;
+                        document.getElementById('bairro').value = d.bairro;
+                        document.getElementById('cidade').value = d.localidade;
+                        document.getElementById('estado').value = d.uf;
+                        atualizarDDD();
+                    }
+                });
+            }
+        }
+        function irParaDocumentos() {
+            document.getElementById('passo1').classList.remove('ativo'); document.getElementById('passo2').classList.add('ativo');
+            document.getElementById('aba1').classList.remove('ativa'); document.getElementById('aba2').classList.add('ativa');
+        }
+        function voltarParaDados() {
+            document.getElementById('passo2').classList.remove('ativo'); document.getElementById('passo1').classList.add('ativo');
+            document.getElementById('aba2').classList.remove('ativa'); document.getElementById('aba1').classList.add('ativa');
+        }
+        window.onload = atualizarDDD;
+    </script>
+</body>
+</html>

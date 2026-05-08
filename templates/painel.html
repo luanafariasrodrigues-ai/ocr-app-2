@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Administrativo</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f8f9fa; }
+
+        /* Cabeçalho com botão Sair */
+        .header-adm { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-sair { background-color: #dc3545; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; }
+        .btn-sair:hover { background-color: #a71d2a; }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; overflow-x: auto; }
+        .tab-btn { padding: 10px 15px; border: none; background: #e9ecef; cursor: pointer; border-radius: 5px; white-space: nowrap; font-weight: bold; }
+        .tab-btn.active { background: #007bff; color: white; }
+
+        .conteudo { display: none; }
+        .conteudo.active { display: block; }
+
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; vertical-align: top; }
+        th { background: #007bff; color: white; }
+
+        .doc-link { display: block; margin-bottom: 5px; text-decoration: none; color: #28a745; font-weight: bold; font-size: 13px; border: 1px solid #28a745; padding: 4px; border-radius: 4px; text-align: center; }
+        .doc-link:hover { background: #28a745; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="header-adm">
+        <h1>Painel de Matrículas (ADM)</h1>
+        <a href="/sair" class="btn-sair">Sair do Sistema ⏻</a>
+    </div>
+
+    <div class="tabs">
+        {% set cursos = [] %}
+        {% for c in cadastros %}
+            {% if c.curso not in cursos %}
+                {% set _ = cursos.append(c.curso) %}
+            {% endif %}
+        {% endfor %}
+
+        {% for curso in cursos %}
+            <button class="tab-btn" onclick="mostrarCurso(this, '{{ curso|replace(' ', '') }}')">{{ curso }}</button>
+        {% endfor %}
+    </div>
+
+    {% for curso in cursos %}
+    <div id="{{ curso|replace(' ', '') }}" class="conteudo">
+        <h2>Lista: {{ curso }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Aluno / Responsável</th>
+                    <th>Contato e Endereço</th>
+                    <th>Documentos Enviados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in cadastros if a.curso == curso %}
+                <tr>
+                    <td>
+                        <strong>{{ a.nome }}</strong><br>
+                        <small>Vínculo: {{ a.parentesco }}</small>
+                    </td>
+                    <td>
+                        <strong>Tel:</strong> {{ a.telefone }}<br>
+                        <strong>Endereço:</strong> {{ a.endereco }}
+                    </td>
+                    <td>
+                        {% for tipo, arq in a.arquivos.items() %}
+                            <a class="doc-link" href="/baixar/{{ arq }}" target="_blank">📄 VER {{ tipo.replace('_', ' ').upper() }}</a>
+                        {% endfor %}
+                        {% if not a.arquivos %}
+                            <small style="color: #999;">Nenhum anexo.</small>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+
+    {% if not cadastros %}
+        <p style="text-align: center; color: #666; margin-top: 50px;">Nenhuma matrícula cadastrada até o momento.</p>
+    {% endif %}
+
+    <script>
+        function mostrarCurso(btn, id) {
+            const conteudos = document.querySelectorAll('.conteudo');
+            conteudos.forEach(c => c.style.display = 'none');
+
+            const botoes = document.querySelectorAll('.tab-btn');
+            botoes.forEach(b => b.classList.remove('active'));
+
+            const alvo = document.getElementById(id);
+            if (alvo) {
+                alvo.style.display = 'block';
+                btn.classList.add('active');
+            }
+        }
+
+        window.onload = () => {
+            const primeiraAba = document.querySelector('.tab-btn');
+            if (primeiraAba) {
+                primeiraAba.click();
+            }
+        };
+    </script>
+</body>
+</html>

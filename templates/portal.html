@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal Escolar</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { text-align: center; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .opcoes { display: flex; gap: 20px; justify-content: center; }
+        .card {
+            width: 180px; padding: 30px; border: 2px solid #007bff; border-radius: 10px;
+            cursor: pointer; transition: 0.3s; text-decoration: none; color: #007bff;
+        }
+        .card:hover { background-color: #007bff; color: white; transform: translateY(-5px); }
+        .card i { font-size: 40px; display: block; margin-bottom: 10px; }
+        .card span { font-weight: bold; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao Sistema Escolar</h1>
+        <div class="opcoes">
+            <a href="/ficha" class="card">
+                <i>👤</i>
+                <span>Responsável</span>
+                <p style="font-size: 12px;">Preencher Ficha</p>
+            </a>
+
+            <a href="/login" class="card" style="border-color: #6c757d; color: #6c757d;">
+                <i>🏢</i>
+                <span>Secretaria</span>
+                <p style="font-size: 12px;">Acesso Restrito</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
