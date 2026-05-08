@@ -1,9 +1,24 @@
-<div class="login-card">
-    <h2>Criar Conta de Responsável</h2>
-    <form method="POST">
-        <input type="text" name="usuario" placeholder="Escolha um Usuário" required>
-        <input type="password" name="senha" placeholder="Escolha uma Senha" required>
-        <button type="submit">Cadastrar</button>
-    </form>
-    <a href="/login_responsavel">Já tenho conta</a>
-</div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro do Responsável</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Criar Conta</h2>
+        <form method="POST">
+            <input type="text" name="usuario" placeholder="Crie um Usuário" required>
+            <input type="password" name="senha" placeholder="Crie uma Senha" required>
+            <button type="submit">Criar Conta</button>
+        </form>
+        <br><a href="/login_responsavel" style="font-size: 12px;">Já tenho conta</a>
+    </div>
+</body>
+</html>
